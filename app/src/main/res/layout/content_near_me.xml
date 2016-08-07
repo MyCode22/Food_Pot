@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.kpp_technology.foodpot.beta.fragmentHalamanUtama.NearMeActivity"
+    tools:showIn="@layout/layout_near_me">
+
+    <!--    <fragment
+            android:id="@+id/mapNearMe"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            tools:context="com.kpp_technology.foodpot.beta.fragmentHalamanUtama.NearMeActivity" />-->
+
+    <fragment
+        android:id="@+id/mapNearMe"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/near_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:selectableItemBackground="@drawable/ripple" />
+
+</LinearLayout>
