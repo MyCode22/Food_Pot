@@ -6,6 +6,7 @@ package com.kpp_technology.foodpot.beta.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kpp_technology.foodpot.beta.R;
+import com.kpp_technology.foodpot.beta.fragmentHalamanUtama.MenuOrderActivity;
 import com.kpp_technology.foodpot.beta.itemObject.DataObjectListMenu;
 
 import java.util.ArrayList;
@@ -68,12 +70,24 @@ public class MyRecyclerViewAdapterListMenu extends RecyclerView
     @Override
     public void onBindViewHolder(final DataObjectHolder holder, final int position) {
 
-        System.out.println(position+ " >>>>>>>>>> "+mDataset.get(position).getCategoryName());
+        System.out.println(position + " >>>>>>>>>> " + mDataset.get(position).getCategoryName());
 
         holder.nameCate.setText(mDataset.get(position).getCategoryName());
         holder.nameCate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                try {
+                    Intent pindah = new Intent(context, MenuOrderActivity.class);
+                    pindah.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    pindah.putExtra("cat_id", mDataset.get(position).getCatId());
+                    pindah.putExtra("merchant_id", mDataset.get(position).getMerchantId());
+                    pindah.putExtra("cate_name", mDataset.get(position).getCategoryName());
+                    context.startActivity(pindah);
+                } catch (Exception er) {
+
+                }
+
 
             }
         });

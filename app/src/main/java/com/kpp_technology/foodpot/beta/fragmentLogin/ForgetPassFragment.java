@@ -107,7 +107,7 @@ public class ForgetPassFragment extends Fragment {
 
                 String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
 
-                HttpPost httGet = new HttpPost("http://somenoise.esy.es/mobileapp/api/forgotpassword");
+                HttpPost httGet = new HttpPost(getResources().getString(R.string.link)+"forgotpassword");
 
                 httGet.setEntity(new UrlEncodedFormEntity(nameValuePairs,
                         HTTP.UTF_8));

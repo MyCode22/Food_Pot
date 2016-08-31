@@ -6,10 +6,10 @@ package com.kpp_technology.foodpot.beta.itemObject;
 
 public class DataObjectListMenu {
     private String cat_id, category_name, category_description, photo, status, sequence, date_created, date_modified,
-            category_name_trans, category_description_trans;
+            category_name_trans, category_description_trans, merchant_id;
 
 
-    public DataObjectListMenu(String text1, String text3, String text4, String text5, String text8, String text13, String text17, String text18, String text19, String text20) {
+    public DataObjectListMenu(String text1, String text3, String text4, String text5, String text8, String text13, String text17, String text18, String text19, String text20, String text21) {
         cat_id = text1;
         category_name = text3;
         category_description = text4;
@@ -20,6 +20,7 @@ public class DataObjectListMenu {
         date_modified = text18;
         category_name_trans = text19;
         category_description_trans = text20;
+        merchant_id = text21;
 
     }
 
@@ -65,6 +66,10 @@ public class DataObjectListMenu {
 
     public String getCatDescTrans() {
         return category_description_trans;
+    }
+
+    public String getMerchantId() {
+        return merchant_id;
     }
 
 

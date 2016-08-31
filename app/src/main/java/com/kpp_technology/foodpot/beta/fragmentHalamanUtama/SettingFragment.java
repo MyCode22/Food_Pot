@@ -185,7 +185,7 @@ public class SettingFragment extends Fragment {
 
                 System.out.println(" >>>> " + "http://somenoise.esy.es/mobileapp/api/saveprofile");
 
-                HttpPost httGet = new HttpPost("http://somenoise.esy.es/mobileapp/api/saveprofile");
+                HttpPost httGet = new HttpPost(getResources().getString(R.string.link)+"saveprofile");
 
                 httGet.setEntity(new UrlEncodedFormEntity(nameValuePairs,
                         HTTP.UTF_8));

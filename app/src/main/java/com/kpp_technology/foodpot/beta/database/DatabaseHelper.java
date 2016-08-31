@@ -208,31 +208,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                               String lost_password_token, String date_created, String date_modified, String last_login,
                               String status, String token, String avatar, String client_token, String status_login) {
         try {
-            ContentValues cv = new ContentValues();
-            cv.put("client_id", client_id);
-            cv.put("social_strategy", social_strategy);
-            cv.put("first_name", first_name);
-            cv.put("last_name", last_name);
-            cv.put("email_address", email_address);
-            cv.put("password", password);
-            cv.put("street", street);
-            cv.put("city", city);
-            cv.put("state", state);
-            cv.put("zipcode", zipcode);
-            cv.put("country_code", country_code);
-            cv.put("location_name", location_name);
-            cv.put("contact_phone", contact_phone);
-            cv.put("lost_password_token", lost_password_token);
-            cv.put("date_created", date_created);
-            cv.put("date_modified", date_modified);
-            cv.put("last_login", last_login);
-            cv.put("status", status);
-            cv.put("token", token);
-            cv.put("avatar", avatar);
-            cv.put("client_token", client_token);
-            cv.put("status_login", status_login);
+            Cursor cek = getProfile();
+            if (cek.getCount() == 0) {
+                ContentValues cv = new ContentValues();
+                cv.put("client_id", client_id);
+                cv.put("social_strategy", social_strategy);
+                cv.put("first_name", first_name);
+                cv.put("last_name", last_name);
+                cv.put("email_address", email_address);
+                cv.put("password", password);
+                cv.put("street", street);
+                cv.put("city", city);
+                cv.put("state", state);
+                cv.put("zipcode", zipcode);
+                cv.put("country_code", country_code);
+                cv.put("location_name", location_name);
+                cv.put("contact_phone", contact_phone);
+                cv.put("lost_password_token", lost_password_token);
+                cv.put("date_created", date_created);
+                cv.put("date_modified", date_modified);
+                cv.put("last_login", last_login);
+                cv.put("status", status);
+                cv.put("token", token);
+                cv.put("avatar", avatar);
+                cv.put("client_token", client_token);
+                cv.put("status_login", status_login);
 
-            myDataBase.insert("profile", null, cv);
+                myDataBase.insert("profile", null, cv);
+            } else {
+                Log.d("DATABASE ", "Profile " + first_name + " Sudah ada");
+            }
+
         } catch (Exception er) {
             System.out.println("Error query ke profile " + er.getMessage());
         }
@@ -246,18 +252,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                String votes, String is_open, String logo,
                                String map_latitude, String map_longitude) {
         try {
-            ContentValues cv = new ContentValues();
-            cv.put("merchant_id", merchant_id);
-            cv.put("merchant_name", merchant_name);
-            cv.put("address", address);
-            cv.put("ratings", ratings);
-            cv.put("votes", votes);
-            cv.put("is_open", is_open);
-            cv.put("logo", logo);
-            cv.put("map_latitude", map_latitude);
-            cv.put("map_longitude", map_longitude);
+            Cursor cek = getAllMerchantById(merchant_id);
+            if (cek.getCount() == 0) {
+                ContentValues cv = new ContentValues();
+                cv.put("merchant_id", merchant_id);
+                cv.put("merchant_name", merchant_name);
+                cv.put("address", address);
+                cv.put("ratings", ratings);
+                cv.put("votes", votes);
+                cv.put("is_open", is_open);
+                cv.put("logo", logo);
+                cv.put("map_latitude", map_latitude);
+                cv.put("map_longitude", map_longitude);
 
-            myDataBase.insert("merchant", null, cv);
+                myDataBase.insert("merchant", null, cv);
+            } else {
+                Log.d("DATABASE ", "Merchat " + merchant_name + " Sudah ada");
+            }
+
         } catch (Exception er) {
             System.out.println("Error query ke merchant " + er.getMessage());
         }
@@ -396,6 +408,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             return myDataBase.query("merchant", new String[]{"merchant_id", "merchant_name", "address", "ratings", "votes", "is_open", "logo", "map_latitude", "map_longitude"},
                     null, null, null, null, null);
+        } catch (Exception er) {
+            System.out.println("Errorrrr getAllMerchant" + er.getMessage());
+            return null;
+        }
+
+    }
+
+    public Cursor getAllMerchantById(String merchant_id) {
+        try {
+            return myDataBase.query("merchant", new String[]{"merchant_id", "merchant_name", "address", "ratings", "votes", "is_open", "logo", "map_latitude", "map_longitude"},
+                    "merchant_id = " + merchant_id, null, null, null, null);
         } catch (Exception er) {
             System.out.println("Errorrrr getAllMerchant" + er.getMessage());
             return null;

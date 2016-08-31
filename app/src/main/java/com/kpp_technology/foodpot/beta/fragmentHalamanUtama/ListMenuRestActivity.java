@@ -3,6 +3,9 @@ package com.kpp_technology.foodpot.beta.fragmentHalamanUtama;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import com.kpp_technology.foodpot.beta.R;
 import com.kpp_technology.foodpot.beta.adapter.MyRecyclerViewAdapterListMenu;
+import com.kpp_technology.foodpot.beta.database.DatabaseHelper;
 import com.kpp_technology.foodpot.beta.itemObject.DataObjectListMenu;
 
 import org.apache.http.HttpEntity;
@@ -68,6 +72,27 @@ public class ListMenuRestActivity extends Activity {
         businesHour = (TextView) findViewById(R.id.businesHour);
         linearCall = (LinearLayout) findViewById(R.id.linearCall);
         linearMaps = (LinearLayout) findViewById(R.id.linearMaps);
+
+
+        try {
+            DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+            db.openDataBase();
+            Cursor data = db.getAllMerchantById(merchant_id);
+            if (data.moveToFirst()) {
+                do {
+
+                    Bitmap bmp = BitmapFactory.decodeFile(data.getString(data.getColumnIndex("logo")));
+                    imageMerchant.setImageBitmap(bmp);
+                    namaMerchant.setText(data.getString(data.getColumnIndex("merchant_name")));
+                    alamatMerchant.setText(data.getString(data.getColumnIndex("address")));
+                    alamatMerchant2.setText(data.getString(data.getColumnIndex("address")));
+                } while (data.moveToNext());
+            }
+            db.close();
+        } catch (Exception er) {
+
+        }
+
 
         listMenuCategory.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ListMenuRestActivity.this);
@@ -180,7 +205,7 @@ public class ListMenuRestActivity extends Activity {
                             System.out.println("NAMA CATEGORII " + category_name[y]);
 
                             DataObjectListMenu obj = new DataObjectListMenu(cat_id[y], category_name[y], category_description[y], photo[y], status[y],
-                                    sequence[y], date_created[y], date_modified[y], category_name_trans[y], category_description_trans[y]);
+                                    sequence[y], date_created[y], date_modified[y], category_name_trans[y], category_description_trans[y], merchant_id);
                             results.add(y, obj);
 
                         }

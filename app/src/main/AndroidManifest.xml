@@ -74,6 +74,14 @@
         <activity
             android:name=".fragmentHalamanUtama.ListMenuRestActivity"
             android:label="@string/title_activity_list_menu_rest"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".fragmentHalamanUtama.MenuOrderActivity"
+            android:label="@string/title_activity_menu_order"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".fragmentHalamanUtama.CheckoutPayment"
+            android:label="@string/title_activity_checkout_payment"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -130,7 +130,7 @@ public class SignUpFragment extends Fragment {
                 nameValuePairs.add(new BasicNameValuePair("cpassword", params[5]));
                 String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
 
-                HttpPost httGet = new HttpPost("http://somenoise.esy.es/mobileapp/api/signup");
+                HttpPost httGet = new HttpPost(getResources().getString(R.string.link)+"signup");
 
 
                 httGet.setEntity(new UrlEncodedFormEntity(nameValuePairs,

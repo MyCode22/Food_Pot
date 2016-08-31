@@ -114,7 +114,7 @@ public class MyService extends Service {
 
                 String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
 
-                HttpPost httGet = new HttpPost("http://somenoise.esy.es/mobileapp/api/merchantlist");
+                HttpPost httGet = new HttpPost(getResources().getString(R.string.link) + "merchantlist");
 
                 httGet.setEntity(new UrlEncodedFormEntity(nameValuePairs,
                         HTTP.UTF_8));
@@ -153,20 +153,27 @@ public class MyService extends Service {
                         logo = new String[arr.length()];
                         map_longitude = new String[arr.length()];
                         map_latitude = new String[arr.length()];
+                        System.out.println("JUmlah Dataaa " + arr.length());
                         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-
                         db.openDataBase();
                         for (int y = 0; y < arr.length(); y++) {
                             JSONObject ar = arr.getJSONObject(y);
+
                             merchant_id[y] = ar.getString("merchant_id");
+
                             merchant_name[y] = ar.getString("merchant_name");
+                            System.out.println("JUmlah Dataaa " + merchant_name[y]);
                             address[y] = ar.getString("address");
                             ratings[y] = ar.getJSONObject("ratings").getString("ratings");
                             votes[y] = ar.getJSONObject("ratings").getString("votes");
                             is_open[y] = ar.getString("is_open");
                             logo[y] = ar.getString("logo");
-                            map_longitude[y] = ar.getJSONObject("map_coordinates").getString("lontitude");
+                            System.out.println("JUmlah LOGOOO " + logo[y]);
+                            map_longitude[y] = ar.getJSONObject("map_coordinates").getString("longitude");
                             map_latitude[y] = ar.getJSONObject("map_coordinates").getString("latitude");
+
+                            System.out.println("JUmlah map_longitude " + map_longitude[y]);
+                            System.out.println("JUmlah map_latitude " + map_latitude[y]);
 
 
                             System.out.println(">>>>>>>>>>>>>>>  " + merchant_name[y]);
@@ -218,9 +225,8 @@ public class MyService extends Service {
                 }
 
 
-            } catch (Exception k)
-
-            {
+            } catch (Exception e) {
+                System.out.println("Errrorr karena " + e.getMessage());
                 Resultcek = "RTO";
                 result = "false";
             }
@@ -284,7 +290,7 @@ public class MyService extends Service {
 
                 String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
 
-                HttpPost httGet = new HttpPost("http://somenoise.esy.es/mobileapp/api/getOrderHistory");
+                HttpPost httGet = new HttpPost(getResources().getString(R.string.link) + "getOrderHistory");
 
 
                 httGet.setEntity(new UrlEncodedFormEntity(nameValuePairs,

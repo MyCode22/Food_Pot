@@ -136,7 +136,7 @@ public class SignInFragment extends Fragment {
 
                 String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
 
-                HttpPost httGet = new HttpPost("http://somenoise.esy.es/mobileapp/api/login");
+                HttpPost httGet = new HttpPost(getResources().getString(R.string.link) + "login");
 
                 // link = "http://somenoise.esy.es/mobileapp/api/login?" + paramString;
                 // System.out.println("http://somenoise.esy.es/mobileapp/api/login?" + paramString);
@@ -266,10 +266,10 @@ public class SignInFragment extends Fragment {
 
                 String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
 
-                HttpPost httGet = new HttpPost("http://somenoise.esy.es/mobileapp/api/getprofile");
+                HttpPost httGet = new HttpPost(getResources().getString(R.string.link) + "getprofile");
 
                 // link = "http://somenoise.esy.es/mobileapp/api/login?" + paramString;
-                System.out.println("http://somenoise.esy.es/mobileapp/api/getprofile?" + paramString);
+
                 httGet.setEntity(new UrlEncodedFormEntity(nameValuePairs,
                         HTTP.UTF_8));
                 HttpResponse httpResponse = httpClient.execute(httGet);
