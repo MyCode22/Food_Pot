@@ -68,6 +68,7 @@ public class MenuOrderActivity extends Activity {
     String dateKirim, TimeKirim;
 
     public static ArrayList<String> nameItem = new ArrayList<String>();
+    public static ArrayList<String> idItem = new ArrayList<String>();
     public static ArrayList<Integer> jumlahItem = new ArrayList<>();
     public static ArrayList<String> hargaItem = new ArrayList<>();
 
@@ -111,10 +112,6 @@ public class MenuOrderActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-
-
-                // showDate(year, month+1, day);
-
 
                 Dialog dialog = new Dialog(MenuOrderActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -196,6 +193,7 @@ public class MenuOrderActivity extends Activity {
             pindah.putExtra("date", dateKirim);
             pindah.putExtra("weight", String.valueOf(weightSemuanya));
             pindah.putExtra("harga", String.valueOf(jumlahHargaSemuanya));
+            pindah.putExtra("merchant_id", merchant_id);
             startActivity(pindah);
 
 
@@ -210,6 +208,7 @@ public class MenuOrderActivity extends Activity {
         jumlahSemuanya = jumlahSemuanya + tam;
         jumlahHargaSemuanya = jumlahHargaSemuanya + harga;
         textJumlahOrder.setText(String.valueOf(jumlahSemuanya));
+
         jumlahHarga.setText("Rp. " + jumlahHargaSemuanya);
     }
 

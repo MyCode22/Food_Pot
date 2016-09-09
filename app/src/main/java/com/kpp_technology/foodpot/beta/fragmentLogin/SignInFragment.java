@@ -306,6 +306,7 @@ public class SignInFragment extends Fragment {
                             String last_name = jObj.getJSONObject("details").getString("last_name");
                             String email_address = jObj.getJSONObject("details").getString("email_address");
                             String password = jObj.getJSONObject("details").getString("password");
+                            String saldo = jObj.getJSONObject("details").getString("saldo");
                             String street = jObj.getJSONObject("details").getString("street");
                             String city = jObj.getJSONObject("details").getString("city");
                             String state = jObj.getJSONObject("details").getString("state");
@@ -331,7 +332,7 @@ public class SignInFragment extends Fragment {
                                 System.out.println("Error delet " + er.getMessage());
                             }
 
-                            db.insertProfile(client_id, social_strategy, first_name, last_name, email_address, password, street, city, state, zipcode, country_code, location_name, contact_phone, lost_password_token, date_created, date_modified, last_login, status, token, avatar, client_token, status_login);
+                            db.insertProfile(client_id, social_strategy, first_name, last_name, email_address, password, street, city, state, zipcode, country_code, location_name, contact_phone, lost_password_token, date_created, date_modified, last_login, status, token, avatar, client_token, status_login, saldo);
                             db.close();
                         } catch (Exception er) {
                             System.out.println("Error login to DB " + er.getMessage());

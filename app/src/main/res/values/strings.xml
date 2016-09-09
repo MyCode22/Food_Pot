@@ -33,5 +33,6 @@
     <string name="title_activity_list_menu_rest">List Menu Restaurant</string>
     <string name="title_activity_menu_order">Menu Order</string>
     <string name="title_activity_checkout_payment">Booking Confirmation</string>
+    <string name="title_activity_maps_get_address">MapsGetAddress</string>
 
 </resources>

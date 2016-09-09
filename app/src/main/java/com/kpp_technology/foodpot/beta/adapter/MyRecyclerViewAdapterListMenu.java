@@ -83,6 +83,8 @@ public class MyRecyclerViewAdapterListMenu extends RecyclerView
                     pindah.putExtra("cat_id", mDataset.get(position).getCatId());
                     pindah.putExtra("merchant_id", mDataset.get(position).getMerchantId());
                     pindah.putExtra("cate_name", mDataset.get(position).getCategoryName());
+                    //pindah.putExtra("longitude", mDataset.get(position).g);
+                    pindah.putExtra("cate_name", mDataset.get(position).getCategoryName());
                     context.startActivity(pindah);
                 } catch (Exception er) {
 

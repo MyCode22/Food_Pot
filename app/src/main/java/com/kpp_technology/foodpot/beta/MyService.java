@@ -208,10 +208,27 @@ public class MyService extends Service {
 
 
                             try {
-                                System.out.println("Saveee image logo " + pathLogo);
+                                System.out.println("Saveee image logo " + merchant_id[y]);
+                                System.out.println("Saveee image logo " + map_latitude[y]);
+                                System.out.println("Saveee image logo " + map_longitude[y]);
                                 db.insertMerchant(merchant_id[y], merchant_name[y], address[y], ratings[y], votes[y], is_open[y], pathLogo, map_latitude[y], map_longitude[y]);
                             } catch (Exception er) {
                                 System.out.println("Error save data karena " + er.getMessage());
+                            }
+                            try{
+                                Cursor data = db.getAllMerchantById(merchant_id[y]);
+                                if (data.moveToFirst()) {
+                                    do {
+                                        String merchant_latitude = data.getString(data.getColumnIndex("map_latitude"));
+                                        String merchant_longitude = data.getString(data.getColumnIndex("map_longitude"));
+
+                                        System.out.println(merchant_id[y] + " <<< merchant_latitude >>> " + merchant_latitude);
+                                        System.out.println(merchant_id[y]+ " <<<<< merchant_longitude >>>> " + merchant_longitude);
+
+                                    } while (data.moveToNext());
+                                }
+                            }catch (Exception er){
+
                             }
 
                         }

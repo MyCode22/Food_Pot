@@ -206,7 +206,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                               String email_address, String password, String street, String city, String state,
                               String zipcode, String country_code, String location_name, String contact_phone,
                               String lost_password_token, String date_created, String date_modified, String last_login,
-                              String status, String token, String avatar, String client_token, String status_login) {
+                              String status, String token, String avatar, String client_token, String status_login,String saldo) {
         try {
             Cursor cek = getProfile();
             if (cek.getCount() == 0) {
@@ -233,6 +233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cv.put("avatar", avatar);
                 cv.put("client_token", client_token);
                 cv.put("status_login", status_login);
+                cv.put("saldo", saldo);
 
                 myDataBase.insert("profile", null, cv);
             } else {
@@ -395,7 +396,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return myDataBase.query("profile", new String[]{"client_id", "social_strategy", "first_name", "last_name",
                             "email_address", "password", "street", "city", "state", "zipcode", "country_code", "location_name",
                             "contact_phone", "lost_password_token", "date_created", "date_modified", "last_login", "ip_address",
-                            "status", "token", "avatar", "client_token", "email_verification_code", "status_login"},
+                            "status", "token", "avatar", "client_token", "email_verification_code", "status_login","saldo"},
                     null, null, null, null, null);
         } catch (Exception er) {
             System.out.println("Errorrrr getSetting" + er.getMessage());

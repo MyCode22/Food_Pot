@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kpp_technology.foodpot.beta.BerandaActivity;
@@ -40,11 +42,16 @@ import java.util.List;
 
 
 public class SettingFragment extends Fragment {
-    LinearLayout layout2, layout1;
+    LinearLayout layout2, layout1, layoutDefaultPayment;
     LinearLayout layoutProfile, layoutPayment, layoutPoint;
     EditText editPhone, editName, editEmail, editLastName;
     Button cancel_edit, save_edit;
     String token;
+
+    TextView saldoUser;
+    RadioGroup typePembayaran;
+    EditText editVoucher;
+    Button redeem;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -61,6 +68,7 @@ public class SettingFragment extends Fragment {
 
         layout1 = (LinearLayout) view.findViewById(R.id.layout1);
         layout2 = (LinearLayout) view.findViewById(R.id.layout2);
+        layoutDefaultPayment = (LinearLayout) view.findViewById(R.id.layoutDefaultPayment);
 
 
         layoutProfile = (LinearLayout) view.findViewById(R.id.layoutProfile);
@@ -80,6 +88,7 @@ public class SettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 layout2.setVisibility(View.GONE);
+                layoutDefaultPayment.setVisibility(View.GONE);
                 layout1.setVisibility(View.VISIBLE);
             }
         });
@@ -108,6 +117,7 @@ public class SettingFragment extends Fragment {
                 try {
                     layout2.setVisibility(View.VISIBLE);
                     layout1.setVisibility(View.GONE);
+                    layoutDefaultPayment.setVisibility(View.GONE);
 
                     DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
                     db.openDataBase();
@@ -129,6 +139,55 @@ public class SettingFragment extends Fragment {
 
             }
         });
+
+        /**
+         *                      Default Pembayaran
+         */
+
+        saldoUser = (TextView) view.findViewById(R.id.saldoUser);
+        typePembayaran = (RadioGroup) view.findViewById(R.id.typePembayaran);
+        editVoucher = (EditText) view.findViewById(R.id.editVoucher);
+        redeem = (Button) view.findViewById(R.id.redeem);
+
+
+        typePembayaran.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                if (i == R.id.credit) {
+                    editVoucher.setVisibility(View.VISIBLE);
+                } else if (i == R.id.cash) {
+                    editVoucher.setVisibility(View.GONE);
+                }
+
+
+            }
+        });
+
+        layoutPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    layout2.setVisibility(View.GONE);
+                    layout1.setVisibility(View.GONE);
+                    layoutDefaultPayment.setVisibility(View.VISIBLE);
+
+                    DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
+                    db.openDataBase();
+                    Cursor data = db.getProfile();
+                    if (data.moveToFirst()) {
+                        do {
+                            saldoUser.setText(data.getString(data.getColumnIndex("saldo")));
+                        } while (data.moveToNext());
+                    }
+                    db.close();
+
+                } catch (Exception er) {
+
+                }
+            }
+        });
+
 
         return view;
     }
@@ -185,7 +244,7 @@ public class SettingFragment extends Fragment {
 
                 System.out.println(" >>>> " + "http://somenoise.esy.es/mobileapp/api/saveprofile");
 
-                HttpPost httGet = new HttpPost(getResources().getString(R.string.link)+"saveprofile");
+                HttpPost httGet = new HttpPost(getResources().getString(R.string.link) + "saveprofile");
 
                 httGet.setEntity(new UrlEncodedFormEntity(nameValuePairs,
                         HTTP.UTF_8));

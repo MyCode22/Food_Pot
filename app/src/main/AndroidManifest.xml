@@ -82,6 +82,10 @@
         <activity
             android:name=".fragmentHalamanUtama.CheckoutPayment"
             android:label="@string/title_activity_checkout_payment"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".fragmentHalamanUtama.MapsGetAddress"
+            android:label="@string/title_activity_maps_get_address"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

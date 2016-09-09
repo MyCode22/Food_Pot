@@ -98,14 +98,17 @@ public class MyRecyclerViewAdapterListMenuOrder extends RecyclerView
                     // MenuOrderActivity.jumlahItem.add(position,);
 
                     System.out.println(position + " addd " + tam);
+                    System.out.println(position + " getItem ID " + mDataset.get(position).getItemId());
 
 
                     if (MenuOrderActivity.nameItem.contains(mDataset.get(position).getItemName())) {
                         MenuOrderActivity.jumlahItem.set(position, tam);
 
                     } else {
+
                         MenuOrderActivity.nameItem.add(position, mDataset.get(position).getItemName());
                         MenuOrderActivity.hargaItem.add(position, mDataset.get(position).getCurencyRetail());
+                        MenuOrderActivity.idItem.add(position, mDataset.get(position).getItemId());
                         MenuOrderActivity.jumlahItem.add(position, tam);
 
                     }
@@ -129,6 +132,7 @@ public class MyRecyclerViewAdapterListMenuOrder extends RecyclerView
                     System.out.println(position + "  REMOVEEE " + mDataset.get(position).getItemName());
                     MenuOrderActivity.nameItem.remove(mDataset.get(position).getItemName());
                     MenuOrderActivity.hargaItem.remove(position);
+                    MenuOrderActivity.idItem.remove(position);
                     MenuOrderActivity.jumlahItem.remove(position);
 
 
@@ -138,7 +142,7 @@ public class MyRecyclerViewAdapterListMenuOrder extends RecyclerView
                     int har = Integer.valueOf(mDataset.get(position).getCurencyRetail().replace("Rp", "").replace(".", "").trim());
 
                     int weight = Integer.valueOf(mDataset.get(position).getWeight());
-                    MenuOrderActivity.updateBawahRemove(1, har,weight);
+                    MenuOrderActivity.updateBawahRemove(1, har, weight);
 
 
                 } else {
@@ -149,7 +153,7 @@ public class MyRecyclerViewAdapterListMenuOrder extends RecyclerView
 
                     int weight = Integer.valueOf(mDataset.get(position).getWeight());
 
-                    MenuOrderActivity.updateBawahRemove(1, har,weight);
+                    MenuOrderActivity.updateBawahRemove(1, har, weight);
 
                     MenuOrderActivity.jumlahItem.set(position, tam);
                 }
