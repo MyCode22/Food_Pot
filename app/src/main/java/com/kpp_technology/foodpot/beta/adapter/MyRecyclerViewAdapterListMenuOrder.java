@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kpp_technology.foodpot.beta.R;
@@ -29,15 +30,16 @@ public class MyRecyclerViewAdapterListMenuOrder extends RecyclerView
 
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder {
-        ImageView image_write_order, remove, add;
+        ImageView image_write_order;
+        LinearLayout remove, add;
         TextView nameItem, priceItem, jumlahItem;
 
         public DataObjectHolder(View itemView) {
             super(itemView);
 
             image_write_order = (ImageView) itemView.findViewById(R.id.image_write_order);
-            remove = (ImageView) itemView.findViewById(R.id.remove);
-            add = (ImageView) itemView.findViewById(R.id.add);
+            remove = (LinearLayout) itemView.findViewById(R.id.remove);
+            add = (LinearLayout) itemView.findViewById(R.id.add);
             nameItem = (TextView) itemView.findViewById(R.id.nameItem);
             priceItem = (TextView) itemView.findViewById(R.id.priceItem);
             jumlahItem = (TextView) itemView.findViewById(R.id.jumlahItem);
@@ -77,10 +79,12 @@ public class MyRecyclerViewAdapterListMenuOrder extends RecyclerView
         holder.nameItem.setText(mDataset.get(position).getItemName());
         holder.priceItem.setText(mDataset.get(position).getCurencyRetail());
 
+
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                    System.out.println("KLIKKKKKKKK");
                     int be = Integer.valueOf(holder.jumlahItem.getText().toString());
 
                     int tam = be + 1;

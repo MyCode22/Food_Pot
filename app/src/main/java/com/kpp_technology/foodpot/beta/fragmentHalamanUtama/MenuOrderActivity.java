@@ -129,6 +129,20 @@ public class MenuOrderActivity extends Activity {
                     @Override
                     public void onClick(View view) {
 
+                        try {
+                            Intent pindah = new Intent(MenuOrderActivity.this, EconomyOrder.class);
+                            pindah.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            pindah.putExtra("time", TimeKirim);
+                            pindah.putExtra("date", dateKirim);
+                            pindah.putExtra("weight", String.valueOf(weightSemuanya));
+                            pindah.putExtra("harga", String.valueOf(jumlahHargaSemuanya));
+                            pindah.putExtra("merchant_id", merchant_id);
+                            pindah.putExtra("type_transaksi", "economy");
+                            startActivity(pindah);
+                        } catch (Exception er) {
+
+                        }
+
                     }
                 });
                 dialog.show();
@@ -194,6 +208,9 @@ public class MenuOrderActivity extends Activity {
             pindah.putExtra("weight", String.valueOf(weightSemuanya));
             pindah.putExtra("harga", String.valueOf(jumlahHargaSemuanya));
             pindah.putExtra("merchant_id", merchant_id);
+            pindah.putExtra("type_transaksi", "express");
+            pindah.putExtra("getDriverId", "");
+            pindah.putExtra("jadwal_driver", "");
             startActivity(pindah);
 
 
@@ -291,7 +308,7 @@ public class MenuOrderActivity extends Activity {
                     result = jObj.getString("code");
                     messg = jObj.getString("msg");
                     System.out.println("Hasil ok " + result);
-                    if (result.equals("1") & messg.equals("Successful")) {
+                    if (result.equals("1") & messg.equals("sukses")) {
                         JSONArray arr = jObj.getJSONObject("details").getJSONArray("item");
                         category = new String[arr.length()];
                         item_id = new String[arr.length()];

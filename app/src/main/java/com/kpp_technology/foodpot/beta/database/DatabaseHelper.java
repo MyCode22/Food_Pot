@@ -206,7 +206,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                               String email_address, String password, String street, String city, String state,
                               String zipcode, String country_code, String location_name, String contact_phone,
                               String lost_password_token, String date_created, String date_modified, String last_login,
-                              String status, String token, String avatar, String client_token, String status_login,String saldo) {
+                              String status, String token, String avatar, String client_token, String status_login, String saldo) {
         try {
             Cursor cek = getProfile();
             if (cek.getCount() == 0) {
@@ -277,11 +277,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void insertHistoryOrder(String order_id, String title, String status) {
+    public void insertHistoryOrder(String order_id, String title, String title2, String status) {
         try {
             ContentValues cv = new ContentValues();
             cv.put("order_id", order_id);
             cv.put("title", title);
+            cv.put("title2", title2);
             cv.put("status", status);
             myDataBase.insert("history_order", null, cv);
         } catch (Exception er) {
@@ -396,7 +397,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return myDataBase.query("profile", new String[]{"client_id", "social_strategy", "first_name", "last_name",
                             "email_address", "password", "street", "city", "state", "zipcode", "country_code", "location_name",
                             "contact_phone", "lost_password_token", "date_created", "date_modified", "last_login", "ip_address",
-                            "status", "token", "avatar", "client_token", "email_verification_code", "status_login","saldo"},
+                            "status", "token", "avatar", "client_token", "email_verification_code", "status_login", "saldo"},
                     null, null, null, null, null);
         } catch (Exception er) {
             System.out.println("Errorrrr getSetting" + er.getMessage());
@@ -429,7 +430,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getHistoryOrder(String status) {
         try {
-            return myDataBase.query("history_order", new String[]{"order_id", "title", "status"},
+            return myDataBase.query("history_order", new String[]{"order_id", "title", "title2", "status"},
                     "status='" + status + "'", null, null, null, null);
         } catch (Exception er) {
             System.out.println("Errorrrr " + er.getMessage());

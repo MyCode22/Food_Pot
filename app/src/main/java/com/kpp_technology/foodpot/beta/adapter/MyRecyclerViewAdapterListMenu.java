@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kpp_technology.foodpot.beta.R;
@@ -32,12 +33,14 @@ public class MyRecyclerViewAdapterListMenu extends RecyclerView
     public static class DataObjectHolder extends RecyclerView.ViewHolder {
         ImageView image_next;
         TextView nameCate;
+        LinearLayout linearNextCatel;
 
         public DataObjectHolder(View itemView) {
             super(itemView);
 
             image_next = (ImageView) itemView.findViewById(R.id.image_next);
             nameCate = (TextView) itemView.findViewById(R.id.nameCate);
+            linearNextCatel = (LinearLayout) itemView.findViewById(R.id.linearNextCate);
 
 
             //  itemView.setOnClickListener(this);
@@ -73,7 +76,7 @@ public class MyRecyclerViewAdapterListMenu extends RecyclerView
         System.out.println(position + " >>>>>>>>>> " + mDataset.get(position).getCategoryName());
 
         holder.nameCate.setText(mDataset.get(position).getCategoryName());
-        holder.nameCate.setOnClickListener(new View.OnClickListener() {
+        holder.linearNextCatel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

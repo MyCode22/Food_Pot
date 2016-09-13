@@ -206,8 +206,6 @@ public class SignInFragment extends Fragment {
                     pindah.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(pindah);*/
 
-                    Intent start = new Intent(getActivity(), MyService.class);
-                    getActivity().startService(start);
 
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), messg, Toast.LENGTH_LONG).show();
@@ -366,6 +364,10 @@ public class SignInFragment extends Fragment {
                     pindah.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     pindah.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(pindah);
+
+                    Intent start = new Intent(getActivity(), MyService.class);
+                    getActivity().startService(start);
+
 
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), messg, Toast.LENGTH_LONG).show();

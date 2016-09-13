@@ -174,7 +174,8 @@ public class ListMenuRestActivity extends Activity {
                     result = jObj.getString("code");
                     messg = jObj.getString("msg");
                     System.out.println("Hasil ok " + result);
-                    if (result.equals("1") & messg.equals("Successful")) {
+                    System.out.println("Hasil messg " + messg);
+                    if (result.equals("1") & messg.equals("sukses")) {
                         JSONArray arr = jObj.getJSONObject("details").getJSONArray("category");
                         cat_id = new String[arr.length()];
                         category_name = new String[arr.length()];

@@ -6,6 +6,7 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="baground">#F79520</color>
+    <color name="orangeTrans">#66F79520</color>
     <color name="abu2">#616161</color>
     <color name="merahAti">#BE1E2D</color>
     <color name="ijoMuda">#5BD999</color>

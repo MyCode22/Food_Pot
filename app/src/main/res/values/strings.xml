@@ -2,6 +2,7 @@
     <string name="app_name">Food Pot(Beta)</string>
     <!--<string name="link">http://somenoise.esy.es/mobileapp/api/</string>-->
     <string name="link">http://di-jual.com/mobileapp/api/</string>
+    <string name="apikey">ae5162a18e8afafd29b67b6ec2684813</string>
 
 
     <string name="dummy_button">Dummy Button</string>
@@ -34,5 +35,7 @@
     <string name="title_activity_menu_order">Menu Order</string>
     <string name="title_activity_checkout_payment">Booking Confirmation</string>
     <string name="title_activity_maps_get_address">MapsGetAddress</string>
+    <string name="title_activity_economy_order">EconomyOrder</string>
+    <string name="title_activity_driver_location">Driver Location</string>
 
 </resources>

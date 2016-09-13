@@ -59,10 +59,13 @@ public class MyService extends Service {
                 do {
                     client_id = dat.getString(dat.getColumnIndex("token"));
                     api_key = "ae5162a18e8afafd29b67b6ec2684813";
+                    System.out.println("CLIENT ID " + client_id);
+                    System.out.println("CLIENT ID " + api_key);
                 } while (dat.moveToNext());
             }
             db.close();
         } catch (Exception er) {
+            System.out.println("Errro di service " + er.getMessage());
 
         }
 
@@ -76,7 +79,28 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
 
+
+            try {
+                DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+                db.openDataBase();
+                Cursor dat = db.getProfile();
+                if (dat.moveToFirst()) {
+                    do {
+                        client_id = dat.getString(dat.getColumnIndex("token"));
+                        api_key = "ae5162a18e8afafd29b67b6ec2684813";
+                        System.out.println("CLIENT ID " + client_id);
+                        System.out.println("CLIENT ID " + api_key);
+                    } while (dat.moveToNext());
+                }
+                db.close();
+            } catch (Exception er) {
+                System.out.println("Errro di service " + er.getMessage());
+
+            }
+
+
             new SendMerchant().execute();
+            new SendHistoryOrder().execute(client_id, "", api_key);
 
         } catch (Exception er) {
             System.out.println("Errorrr startCommand " + er.getMessage());
@@ -137,7 +161,7 @@ public class MyService extends Service {
                     }
                     is.close(); // tutup koneksi stlah medapatkan respone
                     json = sb.toString(); // Respon di jadikan sebuah string
-                    System.out.println("hasil request MERCHAAANNTTTT " + json);
+                    // System.out.println("hasil request MERCHAAANNTTTT " + json);
                     jObj = new JSONObject(json);
                     result = jObj.getString("code");
                     messg = jObj.getString("msg");
@@ -153,7 +177,7 @@ public class MyService extends Service {
                         logo = new String[arr.length()];
                         map_longitude = new String[arr.length()];
                         map_latitude = new String[arr.length()];
-                        System.out.println("JUmlah Dataaa " + arr.length());
+                        //  System.out.println("JUmlah Dataaa " + arr.length());
                         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
                         db.openDataBase();
                         for (int y = 0; y < arr.length(); y++) {
@@ -162,22 +186,22 @@ public class MyService extends Service {
                             merchant_id[y] = ar.getString("merchant_id");
 
                             merchant_name[y] = ar.getString("merchant_name");
-                            System.out.println("JUmlah Dataaa " + merchant_name[y]);
+                            //  System.out.println("JUmlah Dataaa " + merchant_name[y]);
                             address[y] = ar.getString("address");
                             ratings[y] = ar.getJSONObject("ratings").getString("ratings");
                             votes[y] = ar.getJSONObject("ratings").getString("votes");
                             is_open[y] = ar.getString("is_open");
                             logo[y] = ar.getString("logo");
-                            System.out.println("JUmlah LOGOOO " + logo[y]);
+                            // System.out.println("JUmlah LOGOOO " + logo[y]);
                             map_longitude[y] = ar.getJSONObject("map_coordinates").getString("longitude");
                             map_latitude[y] = ar.getJSONObject("map_coordinates").getString("latitude");
 
-                            System.out.println("JUmlah map_longitude " + map_longitude[y]);
+                           /* System.out.println("JUmlah map_longitude " + map_longitude[y]);
                             System.out.println("JUmlah map_latitude " + map_latitude[y]);
 
 
                             System.out.println(">>>>>>>>>>>>>>>  " + merchant_name[y]);
-                            System.out.println(">>>>>>>>>>>>>>>  " + logo[y]);
+                            System.out.println(">>>>>>>>>>>>>>>  " + logo[y]);*/
 
                             try {
                                 URL url = new URL(logo[y]);
@@ -208,14 +232,14 @@ public class MyService extends Service {
 
 
                             try {
-                                System.out.println("Saveee image logo " + merchant_id[y]);
+                              /*  System.out.println("Saveee image logo " + merchant_id[y]);
                                 System.out.println("Saveee image logo " + map_latitude[y]);
-                                System.out.println("Saveee image logo " + map_longitude[y]);
+                                System.out.println("Saveee image logo " + map_longitude[y]);*/
                                 db.insertMerchant(merchant_id[y], merchant_name[y], address[y], ratings[y], votes[y], is_open[y], pathLogo, map_latitude[y], map_longitude[y]);
                             } catch (Exception er) {
                                 System.out.println("Error save data karena " + er.getMessage());
                             }
-                            try{
+                            try {
                                 Cursor data = db.getAllMerchantById(merchant_id[y]);
                                 if (data.moveToFirst()) {
                                     do {
@@ -223,11 +247,11 @@ public class MyService extends Service {
                                         String merchant_longitude = data.getString(data.getColumnIndex("map_longitude"));
 
                                         System.out.println(merchant_id[y] + " <<< merchant_latitude >>> " + merchant_latitude);
-                                        System.out.println(merchant_id[y]+ " <<<<< merchant_longitude >>>> " + merchant_longitude);
+                                        System.out.println(merchant_id[y] + " <<<<< merchant_longitude >>>> " + merchant_longitude);
 
                                     } while (data.moveToNext());
                                 }
-                            }catch (Exception er){
+                            } catch (Exception er) {
 
                             }
 
@@ -280,7 +304,7 @@ public class MyService extends Service {
     private class SendHistoryOrder extends AsyncTask<String, Void, String> {
         String Resultcek, donlot;
 
-        String[] order_id, title, status;
+        String[] order_id, title, title2, status;
         InputStream is = null;
         JSONObject jObj = null;
         String json = "";
@@ -301,6 +325,9 @@ public class MyService extends Service {
                 DefaultHttpClient httpClient = new DefaultHttpClient();
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(0);
+                System.out.println("client token " + params[0]);
+                System.out.println("client token " + params[1]);
+                System.out.println("client token " + params[2]);
                 nameValuePairs.add(new BasicNameValuePair("client_token", params[0]));
                 nameValuePairs.add(new BasicNameValuePair("lang_id", params[1]));
                 nameValuePairs.add(new BasicNameValuePair("api_key", params[2]));
@@ -315,7 +342,7 @@ public class MyService extends Service {
 
                 HttpResponse httpResponse = httpClient.execute(httGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
-                System.out.println("Code dari response " + code);
+                System.out.println("================== Code dari response getOrderHistory >>> " + code);
 
 
                 if (code == HttpStatus.SC_OK) {
@@ -340,6 +367,7 @@ public class MyService extends Service {
                         JSONArray arr = jObj.getJSONArray("details");
                         order_id = new String[arr.length()];
                         title = new String[arr.length()];
+                        title2 = new String[arr.length()];
                         status = new String[arr.length()];
 
                         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
@@ -349,14 +377,15 @@ public class MyService extends Service {
                             JSONObject ar = arr.getJSONObject(y);
                             order_id[y] = ar.getString("order_id");
                             title[y] = ar.getString("title");
+                            title2[y] = ar.getString("title2");
                             status[y] = ar.getString("status");
 
 
                             try {
-                                //  System.out.println("Saveee image logo " + pathLogo);
-                                db.insertHistoryOrder(order_id[y], title[y], status[y]);
+                                System.out.println("Insert Histori " + title[y]);
+                                db.insertHistoryOrder(order_id[y], title[y], title2[y], status[y]);
                             } catch (Exception er) {
-
+                                System.out.println("Errorrrrr insert " + er.getMessage());
                             }
 
                         }
@@ -373,6 +402,7 @@ public class MyService extends Service {
             } catch (Exception k)
 
             {
+                System.out.println("Errorrr karena " + k.getMessage());
                 Resultcek = "RTO";
                 result = "false";
             }

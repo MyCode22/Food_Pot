@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
+import com.kpp_technology.foodpot.beta.BerandaActivity;
 import com.kpp_technology.foodpot.beta.R;
 import com.kpp_technology.foodpot.beta.database.DatabaseHelper;
 import com.kpp_technology.foodpot.beta.interfaces.APIInterfaces;
@@ -28,12 +29,14 @@ import retrofit2.Response;
 
 public class CheckoutPayment extends AppCompatActivity {
     LinearLayout linearback;
-    String getTime, getDate, getWeight, getHarga, getMerchantId, address, longitudeAddress, latitudeAddress, ItemArray;
+    String kota, provinsi, kodePOs, jalan;
+    String getTime, getDate, getWeight, getHarga, getMerchantId, getDriverId,getJadwalDriver, address, longitudeAddress, latitudeAddress, ItemArray, getTypeTransaksi;
     TextView weightBooking, jumlahHargaBooking, Textaddres, textPickUpTime, textCash, TexttotalPrice, textTax, textDeliveryFee;
     RadioGroup myPayment;
     LinearLayout testter, pilihDeliver, linearOrderFinish;
     String merchant_longitude, merchant_latitude, token;
     double distance, hargaTax, hargaMakanan, hargaFee;
+    String noTelpProfile, client_token, type_payment = "cod";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,25 @@ public class CheckoutPayment extends AppCompatActivity {
         getWeight = ambil.getStringExtra("weight");
         getHarga = ambil.getStringExtra("harga");
         getMerchantId = ambil.getStringExtra("merchant_id");
+        getTypeTransaksi = ambil.getStringExtra("type_transaksi");
+        getDriverId = ambil.getStringExtra("getDriverId");
+        getJadwalDriver = ambil.getStringExtra("jadwal_driver");
+
+        try {
+            DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+            db.openDataBase();
+            Cursor data = db.getProfile();
+            if (data.moveToFirst()) {
+                do {
+                    noTelpProfile = data.getString(data.getColumnIndex("contact_phone"));
+                    client_token = data.getString(data.getColumnIndex("client_token"));
+
+                } while (data.moveToNext());
+            }
+            db.close();
+        } catch (Exception er) {
+
+        }
 
 
         linearback = (LinearLayout) findViewById(R.id.linearback);
@@ -101,8 +123,9 @@ public class CheckoutPayment extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 if (checkedId == R.id.cash) {
-
+                    type_payment = "cod";
                 } else if (checkedId == R.id.credit) {
+                    type_payment = "credit";
                 }
             }
         });
@@ -114,7 +137,7 @@ public class CheckoutPayment extends AppCompatActivity {
         try {
             hargaMakanan = Double.valueOf(getHarga);
             hargaTax = 5 * Double.valueOf(getHarga) / 100;
-            textTax.setText("Rp." + hargaTax);
+            //  textTax.setText("Rp." + hargaTax);
         } catch (Exception er) {
 
         }
@@ -181,30 +204,36 @@ public class CheckoutPayment extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     String add = Textaddres.getText().toString();
-
-                    System.out.println("add >> " + add);
-                    System.out.println("express >> express");
-                    System.out.println("id_lang >> 1");
-                    System.out.println("add >> ae5162a18e8afafd29b67b6ec2684813");
-                    System.out.println("longitudeAddress >> " + longitudeAddress);
-                    System.out.println("latitudeAddress >> " + latitudeAddress);
-
+                    String apikey = getResources().getString(R.string.apikey);
                     APIInterfaces gitHubService = APIInterfaces.retrofit.create(APIInterfaces.class);
-                    final Call<JsonObject> call = gitHubService.repoLoadCart(add, ItemArray, "express", "1", "ae5162a18e8afafd29b67b6ec2684813", longitudeAddress, latitudeAddress);
+
+                    final Call<JsonObject> call = gitHubService.repoPlaceOrder(ItemArray, getTypeTransaksi, getDate, getTime, jalan, kota, provinsi, kodePOs, noTelpProfile, "", "", client_token, add, type_payment, apikey, latitudeAddress, longitudeAddress, getDriverId);
                     call.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            System.out.println("HASIL LOAD CAST " + response.body().toString());
+                            System.out.println("Response send place order " + response.body().toString());
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().toString());
+                                String msg = jsonObject.getString("code");
+                                if (msg.equals("1")) {
+                                    Intent pindah = new Intent(CheckoutPayment.this, BerandaActivity.class);
+                                    pindah.putExtra("status", "orderFinish");
+                                    pindah.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    pindah.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(pindah);
+                                }
+                            } catch (Exception er) {
+
+                            }
                         }
 
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
-                            System.out.println("GAGALA " + t.getMessage());
-
+                            System.out.println("Errorr place order " + t.getMessage());
                         }
                     });
                 } catch (Exception er) {
-
+                    System.out.println("Errorrr sent " + er.getMessage());
                 }
             }
         });
@@ -222,9 +251,13 @@ public class CheckoutPayment extends AppCompatActivity {
                     address = bundle.getString("address");
                     longitudeAddress = bundle.getString("longitude");
                     latitudeAddress = bundle.getString("latitude");
+                    kodePOs = bundle.getString("kodePOs");
+                    jalan = bundle.getString("jalan");
+                    provinsi = bundle.getString("provinsi");
+                    kota = bundle.getString("kota");
                     Textaddres.setText(address);
 
-                    System.out.println("longitudeAddress " + longitudeAddress);
+          /*          System.out.println("longitudeAddress " + longitudeAddress);
                     System.out.println("latitudeAddress " + latitudeAddress);
                     try {
 
@@ -239,12 +272,65 @@ public class CheckoutPayment extends AppCompatActivity {
 
                     } catch (Exception er) {
                         System.out.println("Error get distance " + er.getMessage());
-                    }
+                    }*/
+
+                    sentLoadCart();
+
 
                 }
                 break;
         }
 
+    }
+
+    private void sentLoadCart() {
+        try {
+            String add = Textaddres.getText().toString();
+
+           /* System.out.println("add >> " + add);
+            System.out.println("express >> express");
+            System.out.println("id_lang >> 1");
+            System.out.println("add >> ae5162a18e8afafd29b67b6ec2684813");
+            System.out.println("longitudeAddress >> " + longitudeAddress);
+            System.out.println("latitudeAddress >> " + latitudeAddress);*/
+
+            APIInterfaces gitHubService = APIInterfaces.retrofit.create(APIInterfaces.class);
+            final Call<JsonObject> call = gitHubService.repoLoadCart(add, ItemArray, getTypeTransaksi, "1", "ae5162a18e8afafd29b67b6ec2684813", longitudeAddress, latitudeAddress);
+            call.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    System.out.println("HASIL LOAD CAST " + response.body().toString());
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
+                        String msg = jsonObject.getString("msg");
+                        if (msg.equals("OK")) {
+                            String tax_currency = jsonObject.getJSONObject("details").getJSONObject("cart").getString("tax_currency");
+                            String delivery_charge_currency = jsonObject.getJSONObject("details").getJSONObject("cart").getString("delivery_charge_currency");
+                            String sub_total_currency = jsonObject.getJSONObject("details").getJSONObject("cart").getString("sub_total_currency");
+                            String total_currency = jsonObject.getJSONObject("details").getJSONObject("cart").getString("total_currency");
+
+
+                            textTax.setText(tax_currency);
+                            textDeliveryFee.setText(delivery_charge_currency);
+                            TexttotalPrice.setText(total_currency);
+                            jumlahHargaBooking.setText(sub_total_currency);
+                        }
+
+
+                    } catch (Exception er) {
+                        System.out.println("Errro laod chary " + er.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    System.out.println("gagal load chart " + t.getMessage());
+
+                }
+            });
+        } catch (Exception er) {
+            System.out.println("Errorrrrr " + er.getMessage());
+        }
     }
 
 

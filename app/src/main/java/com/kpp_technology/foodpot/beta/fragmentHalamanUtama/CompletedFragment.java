@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +12,19 @@ import android.view.ViewGroup;
 
 import com.kpp_technology.foodpot.beta.R;
 import com.kpp_technology.foodpot.beta.adapter.MyRecyclerViewAdapter;
+import com.kpp_technology.foodpot.beta.adapter.MyRecyclerViewAdapterInProgress;
 import com.kpp_technology.foodpot.beta.database.DatabaseHelper;
-import com.kpp_technology.foodpot.beta.itemObject.DataObject;
+import com.kpp_technology.foodpot.beta.itemObject.DataObjectInProgress;
 
 import java.util.ArrayList;
 
 
 public class CompletedFragment extends Fragment {
-    RecyclerView home_recycler_view;
-    RecyclerView listFood;
+    MyRecyclerViewAdapterInProgress adapter;
+    RecyclerView listInProgress;
+    DataObjectInProgress object;
+    ArrayList results = new ArrayList<DataObjectInProgress>();
+    RecyclerView.LayoutManager mLayoutManager;
 
     public CompletedFragment() {
         // Required empty public constructor
@@ -33,16 +38,22 @@ public class CompletedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_in_progress, container, false);
+        System.out.println("Masuk ke INPROGRESSS");
+        listInProgress = (RecyclerView) view.findViewById(R.id.listInProgress);
+        listInProgress.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        listInProgress.setLayoutManager(mLayoutManager);
 
-
+        new getHistoryOrder().execute();
         return view;
     }
 
-    public class getMerchant extends AsyncTask<String, Void, String> {
-        String[] merchant_id, merchant_name, address, ratings, votes, is_open, logo, map_longitude, map_latitude;
+    public class getHistoryOrder extends AsyncTask<String, Void, String> {
+
         int r = 0;
-        ArrayList results = new ArrayList<DataObject>();
+
         MyRecyclerViewAdapter mAdapter;
+        String[] order_id, title, title2, status;
 
         @Override
         protected void onPreExecute() {
@@ -63,41 +74,29 @@ public class CompletedFragment extends Fragment {
             try {
                 DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
                 db.openDataBase();
-                Cursor data = db.getAllMerchant();
-                merchant_id = new String[data.getCount()];
-                merchant_name = new String[data.getCount()];
-                address = new String[data.getCount()];
-                ratings = new String[data.getCount()];
-                votes = new String[data.getCount()];
+                Cursor data = db.getHistoryOrder("sukses");
+                System.out.println("JUMLAH DATA PENDING " + data.getCount());
+                order_id = new String[data.getCount()];
+                title = new String[data.getCount()];
+                title2 = new String[data.getCount()];
+                status = new String[data.getCount()];
 
-                is_open = new String[data.getCount()];
-                logo = new String[data.getCount()];
-                map_longitude = new String[data.getCount()];
-                map_latitude = new String[data.getCount()];
-
-
+                results.clear();
                 if (data.moveToFirst()) {
                     do {
 
-                        merchant_id[r] = data.getString(data.getColumnIndex("merchant_id"));
-                        merchant_name[r] = data.getString(data.getColumnIndex("merchant_name"));
-                        address[r] = data.getString(data.getColumnIndex("address"));
-                        ratings[r] = data.getString(data.getColumnIndex("ratings"));
-                        votes[r] = data.getString(data.getColumnIndex("votes"));
-
-                        is_open[r] = data.getString(data.getColumnIndex("is_open"));
-
-
-                        logo[r] = data.getString(data.getColumnIndex("logo"));
-                        map_longitude[r] = data.getString(data.getColumnIndex("map_longitude"));
-                        map_latitude[r] = data.getString(data.getColumnIndex("map_latitude"));
+                        order_id[r] = data.getString(data.getColumnIndex("order_id"));
+                        title[r] = data.getString(data.getColumnIndex("title"));
+                        title2[r] = data.getString(data.getColumnIndex("title2"));
+                        status[r] = data.getString(data.getColumnIndex("status"));
 
 
                         // System.out.println(r+" SET IMAGE LOGO " + logo[r]);
 
-                        DataObject obj = new DataObject(merchant_id[r], merchant_name[r], address[r], ratings[r], votes[r],
-                                is_open[r], logo[r], map_longitude[r], map_latitude[r]);
-                        results.add(r, obj);
+                        object = new DataObjectInProgress(title[r], title2[r], status[r], order_id[r]);
+
+                        results.add(r, object);
+
                         r++;
 
 
@@ -117,9 +116,11 @@ public class CompletedFragment extends Fragment {
         @Override
         protected void onPostExecute(String hasil) {
             try {
-
-                mAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(), results);
-                listFood.setAdapter(mAdapter);
+                adapter = new MyRecyclerViewAdapterInProgress(getActivity().getApplicationContext(), results);
+                listInProgress.setAdapter(adapter);
+               /* ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_list_item_1, android.R.id.text1, title);
+                listInProgress.setAdapter(adapter);*/
 
             } catch (Exception er) {
 

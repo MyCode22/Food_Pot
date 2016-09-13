@@ -86,6 +86,14 @@
         <activity
             android:name=".fragmentHalamanUtama.MapsGetAddress"
             android:label="@string/title_activity_maps_get_address"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".fragmentHalamanUtama.EconomyOrder"
+            android:label="@string/title_activity_economy_order"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".fragmentHalamanUtama.DriverLocation"
+            android:label="@string/title_activity_driver_location"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
